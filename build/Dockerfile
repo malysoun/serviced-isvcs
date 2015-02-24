@@ -5,8 +5,12 @@ RUN mkdir /usr/local/serviced/resources -p # this is mounted in to every isvcs c
 RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe" > /etc/apt/sources.list; \
     echo "deb http://security.ubuntu.com/ubuntu trusty-security main universe" >> /etc/apt/sources.list; \
     apt-get update; \
+    apt-get install -y wget; \
+    wget -qO- 'https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc' | apt-key add -; \
+    echo deb http://ceph.com/debian-giant/ trusty main | tee /etc/apt/sources.list.d/ceph-giant.list; \
+    apt-get update; \
     apt-get upgrade -y; \
-    apt-get install -y -q openjdk-7-jre-headless gnuplot-nox supervisor make \
+    apt-get install -y -q --force-yes libc6=2.19-0ubuntu6.4 libc6-dev openjdk-7-jre-headless gnuplot-nox supervisor make ceph \
     redis-server git-core build-essential python-dev \
     libevent1-dev python-openssl liblzma-dev wget; \
     apt-get clean; \
@@ -33,3 +37,4 @@ ADD es_logstash.tar.gz /
 ADD zk.tar.gz /
 ADD logstash.tar.gz /
 ADD celery.tar.gz /
+ADD ceph.tar.gz /
