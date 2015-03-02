@@ -18,7 +18,7 @@ fi
 mkdir -p /var/lib/ceph/osd/${CLUSTER}-${OSD_ID}
 
 # Mount the device (if it exists)
-if `df /dev/ceph` ; then
+if df /dev/ceph ; then
     mount -t xfs /dev/ceph /var/lib/ceph/osd/${CLUSTER}-${OSD_ID}
 fi
 
