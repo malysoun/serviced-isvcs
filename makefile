@@ -12,7 +12,7 @@
 # limitations under the License.
 
 BUILD_NUMBER       ?= $(shell date +%y%m%d)
-COMPONENT_NAMES    := es_serviced es_logstash zk opentsdb logstash query consumer celery
+COMPONENT_NAMES    := es_serviced es_logstash zk opentsdb logstash query consumer celery ceph
 HERE               := $(shell pwd)
 UID                := $(shell id -u)
 GID                := $(shell id -g)

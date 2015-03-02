@@ -1,5 +1,10 @@
+# Code provided by https://github.com/ceph/ceph-docker
+# Copyright (c) 2014 Seán C. McCord (MIT License)
+
 #!/bin/bash
 set -e
+
+: ${CLUSTER:=ceph}
 
 # Expected environment variables:
 #   MON_IP - (IP address of the monitor)

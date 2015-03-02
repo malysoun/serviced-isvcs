@@ -20,5 +20,6 @@ default: tarball
 tarball:
 	mkdir -p /opt/ceph/bin
 	cp /tmp/in/ceph-mon.sh /opt/ceph/bin/ceph-mon.sh
+	cp /tmp/in/ceph-osd.sh /opt/ceph/bin/ceph-osd.sh
 	ln -s /usr/local/serviced/resources/ceph /etc/ceph
 	tar czf $(TARGET)/ceph.tar.gz /opt /etc/ceph

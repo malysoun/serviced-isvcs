@@ -12,7 +12,7 @@
 # limitations under the License.
 
 TARGET := $(shell pwd)
-ZK_VERSION := 3.4.5
+ZK_VERSION := 3.4.6
 
 .PHONY: default tarball
 
@@ -25,6 +25,6 @@ tarball:
 	mkdir /opt/exhibitor && \
 		wget -q -O /opt/exhibitor/pom.xml https://raw.github.com/Netflix/exhibitor/master/exhibitor-standalone/src/main/resources/buildscripts/standalone/maven/pom.xml && \
 		cd /opt/exhibitor && \
-		mvn assembly:single
+		mvn clean package
 	sed -i 's|start-foreground)|start-foreground)\n /usr/bin/java -jar /opt/exhibitor/target/exhibitor-*-jar-with-dependencies.jar -c file --port 12181 \&|g' /opt/zookeeper-$(ZK_VERSION)/bin/zkServer.sh
 	tar czf $(TARGET)/zk.tar.gz /opt
