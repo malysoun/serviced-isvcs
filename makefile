@@ -11,17 +11,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+COMPONENTS := registry es_serviced es_logstash zk opentsdb logstash query consumer celery
+
+.PHONY: build-image
+build-image:
+
+
+.PHONY: install
+install: 
+
+
+
+
+
+
+
+
 BUILD_NUMBER       ?= $(shell date +%y%m%d)
-COMPONENT_NAMES    := registry es_serviced es_logstash zk opentsdb logstash query consumer celery
+COMPONENT_NAMES    := deps registry es_serviced es_logstash zk opentsdb logstash query consumer celery
 HERE               := $(shell pwd)
 UID                := $(shell id -u)
 GID                := $(shell id -g)
 BUILD_DIR          := build
 REPO               := zenoss/serviced-isvcs
-VERSION            := 31
+VERSION            := 32
 TAG                := v$(VERSION)
 BUILD_REPO         := zenoss/isvcs_build
-BUILD_REPO_TAG     := v2
+BUILD_REPO_TAG     := v4
 REPO_DIR           := images
 EXPORTED_FILE      := $(REPO_DIR)/$(REPO)/$(TAG).tar.gz
 COMPONENT_ARCHIVES := $(foreach cname, $(COMPONENT_NAMES), $(BUILD_DIR)/$(cname).tar.gz)

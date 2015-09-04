@@ -1,41 +1,14 @@
 FROM ubuntu:trusty
 MAINTAINER Zenoss <dev@zenoss.com>
 
-# this forces dpkg not to call sync() after package extraction and speeds up install
-RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
-# we don't need and apt cache in a container
-RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
-
-RUN echo "deb http://archive.ubuntu.com/ubuntu trusty main universe" > /etc/apt/sources.list; \
-    echo "deb http://security.ubuntu.com/ubuntu trusty-security main universe" >> /etc/apt/sources.list 
-RUN apt-get update
-RUN apt-get upgrade -y
-
-##
-# Fake a fuse install -- necessary for openjdk-7-jdk
-#  https://gist.github.com/henrik-muehe/6155333
-RUN apt-get install libfuse2
-RUN cd /tmp ; apt-get download fuse; dpkg-deb -x fuse_* . ; dpkg-deb -e fuse_* ; rm fuse_*.deb ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst ; dpkg-deb -b . /fuse.deb ; dpkg -i /fuse.deb
-
-# Install Packages required to run opentsdb
-RUN apt-get install -y -q openjdk-7-jdk git autoconf build-essential libtool gnuplot wget supervisor
-ENV COMPRESSION NONE
-ENV HBASE_HOME /opt/hbase-0.94.16
-ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
-
-RUN apt-get -y install maven
-RUN apt-get -y install python-virtualenv
-RUN apt-get -y install librados-dev
-
-RUN apt-get -y install ruby-dev gcc
-RUN gem install fpm
-RUN apt-get -y install rpm
-
-RUN wget --quiet https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
-RUN tar -xf go1.4.2.linux-amd64.tar.gz
-RUN mv go /usr/local/go
-ENV GOROOT /usr/local/go
-ENV GOPATH /root/go
-ENV PATH /usr/local/go/bin:/root/go/bin:$PATH
-
-
+ENV COMPRESSION=NONE HBASE_HOME=/opt/hbase-0.94.16 JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 
+RUN apt-get update && \
+    apt-get install -y build-essential openjdk-7-jdk git build-essential libtool wget supervisor python-pip python-dev maven librados-dev ruby-dev rpm liblzma-dev autoconf; \
+    pip install --upgrade pip wheel virtualenv; \
+    gem install fpm; \
+    cd /root; \
+    wget --quiet https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz; \
+    tar -xf go1.4.2.linux-amd64.tar.gz; \
+    rm go1.4.2.linux-amd64.tar.gz; \
+    mv go /usr/local/go;
+ENV GOROOT=/usr/local/go GOPATH=/root/go PATH=/usr/local/go/bin:/root/go/bin:$PATH

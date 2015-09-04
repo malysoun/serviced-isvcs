@@ -11,9 +11,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+NAME	:= celery
+VERSION := 1
+
+.PHONY: default
+default:
+
+tar/$(NAME).tar.gz:
+	cd /opt && virtualenv celery
+
+zenoss/isvcs-$(IMAGE_NAME).$(TAG).$(DOCKER_VERSION).tar:
+	docker build -t isvcs-$(NAME).$(TAG).$(DOCKER_VERSION).tar
+
+
+
+
 TARGET := $(shell pwd)
 
-.PHONY: default tarball
+
+
+
+
+
+
+
+.PHONY: default tarball image
+
+
+
+
+
+
+
+
+IMAGE := zenoss/isvcs-celery:v1
 
 default: tarball
 
@@ -25,3 +56,6 @@ tarball:
 	cp /tmp/in/celery-supervisor.conf /opt/celery/etc/supervisor.conf
 	ln -s /usr/local/serviced/resources/cpcelery.py /opt/celery/lib/python2.7/site-packages/cpcelery.py
 	tar czf $(TARGET)/celery.tar.gz /opt
+
+image:
+	docker -t  
